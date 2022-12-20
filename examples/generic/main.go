@@ -42,13 +42,21 @@ func main() {
 		rb.Write(strconv.Itoa(i))
 	}
 
+	all := rb.PeekAll()
+	fmt.Println(all)
+
+	rb.Overwrite("F")
+
+	all = rb.PeekAll()
+	fmt.Println(all)
+
 	latest, _ := rb.RPeek()
 	fmt.Println(latest)
 
 	popLatest, _ := rb.RRead()
 	fmt.Println(popLatest)
 
-	all := rb.PeekAll()
+	all = rb.PeekAll()
 	fmt.Println(all)
 
 	top3 := rb.RPeekN(3)
@@ -64,8 +72,10 @@ func main() {
 	// discards: 7
 	// discards: 8
 	// discards: 9
-	// 4
-	// 4
-	// [0 1 2 3]
-	// [1 2 3]
+	// [0 1 2 3 4]
+	// [1 2 3 4 F]
+	// F
+	// F
+	// [1 2 3 4]
+	// [2 3 4]
 }

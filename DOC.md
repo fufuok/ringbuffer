@@ -19,6 +19,7 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBuffer) LPeekN(n int) []T](<#func-ringbuffer-lpeekn>)
   - [func (r *RingBuffer) Len() int](<#func-ringbuffer-len>)
   - [func (r *RingBuffer) MaxSize() int](<#func-ringbuffer-maxsize>)
+  - [func (r *RingBuffer) Overwrite(v T)](<#func-ringbuffer-overwrite>)
   - [func (r *RingBuffer) Peek() (T, error)](<#func-ringbuffer-peek>)
   - [func (r *RingBuffer) PeekAll() (buf []T)](<#func-ringbuffer-peekall>)
   - [func (r *RingBuffer) RPeek() (T, error)](<#func-ringbuffer-rpeek>)
@@ -28,6 +29,7 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBuffer) Reset()](<#func-ringbuffer-reset>)
   - [func (r *RingBuffer) SetMaxSize(n int) int](<#func-ringbuffer-setmaxsize>)
   - [func (r *RingBuffer) SetOnDiscards(fn func(interface{}))](<#func-ringbuffer-setondiscards>)
+  - [func (r *RingBuffer) Truncate(n int)](<#func-ringbuffer-truncate>)
   - [func (r *RingBuffer) Write(v T)](<#func-ringbuffer-write>)
 - [type RingBufferOf](<#type-ringbufferof>)
   - [func NewFixedOf[T any](initialSize int) *RingBufferOf[T]](<#func-newfixedof>)
@@ -39,6 +41,7 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBufferOf[T]) LPeekN(n int) []T](<#func-ringbufferoft-lpeekn>)
   - [func (r *RingBufferOf[T]) Len() int](<#func-ringbufferoft-len>)
   - [func (r *RingBufferOf[T]) MaxSize() int](<#func-ringbufferoft-maxsize>)
+  - [func (r *RingBufferOf[T]) Overwrite(v T)](<#func-ringbufferoft-overwrite>)
   - [func (r *RingBufferOf[T]) Peek() (T, error)](<#func-ringbufferoft-peek>)
   - [func (r *RingBufferOf[T]) PeekAll() (buf []T)](<#func-ringbufferoft-peekall>)
   - [func (r *RingBufferOf[T]) RPeek() (T, error)](<#func-ringbufferoft-rpeek>)
@@ -48,6 +51,7 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBufferOf[T]) Reset()](<#func-ringbufferoft-reset>)
   - [func (r *RingBufferOf[T]) SetMaxSize(n int) int](<#func-ringbufferoft-setmaxsize>)
   - [func (r *RingBufferOf[T]) SetOnDiscards(fn func(T))](<#func-ringbufferoft-setondiscards>)
+  - [func (r *RingBufferOf[T]) Truncate(n int)](<#func-ringbufferoft-truncate>)
   - [func (r *RingBufferOf[T]) Write(v T)](<#func-ringbufferoft-write>)
 - [type T](<#type-t>)
 
@@ -124,6 +128,14 @@ func (r *RingBuffer) Len() int
 func (r *RingBuffer) MaxSize() int
 ```
 
+### func \(\*RingBuffer\) Overwrite
+
+```go
+func (r *RingBuffer) Overwrite(v T)
+```
+
+Overwrite write, when the buffer reaches the maximum value, overwrite unread data.
+
 ### func \(\*RingBuffer\) Peek
 
 ```go
@@ -181,6 +193,14 @@ func (r *RingBuffer) SetMaxSize(n int) int
 ```go
 func (r *RingBuffer) SetOnDiscards(fn func(interface{}))
 ```
+
+### func \(\*RingBuffer\) Truncate
+
+```go
+func (r *RingBuffer) Truncate(n int)
+```
+
+Truncate discards all but the first n unread bytes from the buffer but continues to use the same allocated storage.
 
 ### func \(\*RingBuffer\) Write
 
@@ -254,6 +274,14 @@ func (r *RingBufferOf[T]) Len() int
 func (r *RingBufferOf[T]) MaxSize() int
 ```
 
+### func \(\*RingBufferOf\[T\]\) Overwrite
+
+```go
+func (r *RingBufferOf[T]) Overwrite(v T)
+```
+
+Overwrite write, when the buffer reaches the maximum value, overwrite unread data.
+
 ### func \(\*RingBufferOf\[T\]\) Peek
 
 ```go
@@ -311,6 +339,14 @@ func (r *RingBufferOf[T]) SetMaxSize(n int) int
 ```go
 func (r *RingBufferOf[T]) SetOnDiscards(fn func(T))
 ```
+
+### func \(\*RingBufferOf\[T\]\) Truncate
+
+```go
+func (r *RingBufferOf[T]) Truncate(n int)
+```
+
+Truncate discards all but the first n unread bytes from the buffer but continues to use the same allocated storage.
 
 ### func \(\*RingBufferOf\[T\]\) Write
 
