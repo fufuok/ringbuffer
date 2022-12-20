@@ -155,6 +155,27 @@ func (r *RingBufferOf[T]) Write(v T) {
 	}
 }
 
+// Overwrite write, when the buffer reaches the maximum value, overwrite unread data.
+func (r *RingBufferOf[T]) Overwrite(v T) {
+	if r.maxSize > 0 && r.Len() >= r.maxSize {
+		r.r++
+		if r.r == r.size {
+			r.r = 0
+		}
+	}
+
+	r.buf[r.w] = v
+	r.w++
+
+	if r.w == r.size {
+		r.w = 0
+	}
+
+	if r.w == r.r { // full
+		r.grow()
+	}
+}
+
 func (r *RingBufferOf[T]) grow() {
 	var size int
 	if r.size < 1024 {

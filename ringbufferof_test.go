@@ -265,3 +265,26 @@ func TestRingBufferOf_RRead(t *testing.T) {
 	assert.True(t, rb.IsEmpty())
 	assert.Equal(t, 1, rb.w)
 }
+
+func TestRingBufferOf_Overwrite(t *testing.T) {
+	rb := NewUnboundedOf[int](5)
+	for i := 0; i < 10; i++ {
+		rb.Write(i)
+	}
+	assert.Equal(t, 10, rb.Len())
+
+	rb.SetMaxSize(3)
+	assert.Equal(t, 3, rb.Len())
+	assert.Equal(t, []int{7, 8, 9}, rb.PeekAll())
+
+	rb.Write(10)
+	assert.Equal(t, []int{7, 8, 9}, rb.PeekAll())
+
+	rb.Overwrite(10)
+	assert.Equal(t, []int{8, 9, 10}, rb.PeekAll())
+	rb.Overwrite(11)
+	assert.Equal(t, []int{9, 10, 11}, rb.PeekAll())
+
+	rb.Truncate(2)
+	assert.Equal(t, []int{10, 11}, rb.PeekAll())
+}
