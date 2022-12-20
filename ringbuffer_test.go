@@ -233,3 +233,44 @@ func TestRingBuffer_PeekAll(t *testing.T) {
 	assert.Equal(t, []T{1, 0, 1}, rb.LPeekN(3))
 	assert.Equal(t, []T{2, 3, 4}, rb.RPeekN(3))
 }
+
+func TestRingBuffer_RRead(t *testing.T) {
+	rb := NewFixed(2)
+
+	rb.Write(1)
+	v, err := rb.RPeek()
+	assert.Nil(t, err)
+	assert.Equal(t, 1, v)
+	assert.Equal(t, 1, rb.Len())
+
+	v, err = rb.RRead()
+	assert.Nil(t, err)
+	assert.Equal(t, 1, v)
+	assert.True(t, rb.IsEmpty())
+
+	v, err = rb.RPeek()
+	assert.Error(t, err, ErrIsEmpty)
+	assert.Equal(t, nil, v)
+	v, err = rb.RRead()
+	assert.Error(t, err, ErrIsEmpty)
+	assert.Equal(t, nil, v)
+	assert.Equal(t, 0, rb.w)
+
+	for i := 0; i < 5; i++ {
+		rb.Write(i)
+		_, _ = rb.Read()
+	}
+	rb.Write(7)
+	assert.Equal(t, 0, rb.w)
+
+	v, err = rb.RPeek()
+	assert.Nil(t, err)
+	assert.Equal(t, 7, v)
+	assert.Equal(t, 1, rb.Len())
+
+	v, err = rb.RRead()
+	assert.Nil(t, err)
+	assert.Equal(t, 7, v)
+	assert.True(t, rb.IsEmpty())
+	assert.Equal(t, 1, rb.w)
+}

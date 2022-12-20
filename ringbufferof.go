@@ -60,12 +60,38 @@ func (r *RingBufferOf[T]) Read() (T, error) {
 	return v, nil
 }
 
+// RRead erases the last written data, and returns that data.
+func (r *RingBufferOf[T]) RRead() (T, error) {
+	if r.r == r.w {
+		var t T
+		return t, ErrIsEmpty
+	}
+	if r.w == 0 {
+		r.w = r.size - 1
+		return r.buf[r.w], nil
+	}
+	r.w--
+	return r.buf[r.w], nil
+}
+
 func (r *RingBufferOf[T]) Peek() (T, error) {
 	if r.r == r.w {
 		var t T
 		return t, ErrIsEmpty
 	}
 	return r.buf[r.r], nil
+}
+
+// RPeek get the latest written data.
+func (r *RingBufferOf[T]) RPeek() (T, error) {
+	if r.r == r.w {
+		var t T
+		return t, ErrIsEmpty
+	}
+	if r.w == 0 {
+		return r.buf[r.size-1], nil
+	}
+	return r.buf[r.w-1], nil
 }
 
 func (r *RingBufferOf[T]) PeekAll() (buf []T) {

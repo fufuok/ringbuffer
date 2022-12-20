@@ -42,6 +42,12 @@ func main() {
 		rb.Write(strconv.Itoa(i))
 	}
 
+	latest, _ := rb.RPeek()
+	fmt.Println(latest)
+
+	popLatest, _ := rb.RRead()
+	fmt.Println(popLatest)
+
 	all := rb.PeekAll()
 	fmt.Println(all)
 
@@ -58,6 +64,8 @@ func main() {
 	// discards: 7
 	// discards: 8
 	// discards: 9
-	// [0 1 2 3 4]
-	// [2 3 4]
+	// 4
+	// 4
+	// [0 1 2 3]
+	// [1 2 3]
 }

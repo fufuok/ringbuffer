@@ -21,7 +21,9 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBuffer) MaxSize() int](<#func-ringbuffer-maxsize>)
   - [func (r *RingBuffer) Peek() (T, error)](<#func-ringbuffer-peek>)
   - [func (r *RingBuffer) PeekAll() (buf []T)](<#func-ringbuffer-peekall>)
+  - [func (r *RingBuffer) RPeek() (T, error)](<#func-ringbuffer-rpeek>)
   - [func (r *RingBuffer) RPeekN(n int) []T](<#func-ringbuffer-rpeekn>)
+  - [func (r *RingBuffer) RRead() (T, error)](<#func-ringbuffer-rread>)
   - [func (r *RingBuffer) Read() (T, error)](<#func-ringbuffer-read>)
   - [func (r *RingBuffer) Reset()](<#func-ringbuffer-reset>)
   - [func (r *RingBuffer) SetMaxSize(n int) int](<#func-ringbuffer-setmaxsize>)
@@ -39,7 +41,9 @@ import "github.com/fufuok/ringbuffer"
   - [func (r *RingBufferOf[T]) MaxSize() int](<#func-ringbufferoft-maxsize>)
   - [func (r *RingBufferOf[T]) Peek() (T, error)](<#func-ringbufferoft-peek>)
   - [func (r *RingBufferOf[T]) PeekAll() (buf []T)](<#func-ringbufferoft-peekall>)
+  - [func (r *RingBufferOf[T]) RPeek() (T, error)](<#func-ringbufferoft-rpeek>)
   - [func (r *RingBufferOf[T]) RPeekN(n int) []T](<#func-ringbufferoft-rpeekn>)
+  - [func (r *RingBufferOf[T]) RRead() (T, error)](<#func-ringbufferoft-rread>)
   - [func (r *RingBufferOf[T]) Read() (T, error)](<#func-ringbufferoft-read>)
   - [func (r *RingBufferOf[T]) Reset()](<#func-ringbufferoft-reset>)
   - [func (r *RingBufferOf[T]) SetMaxSize(n int) int](<#func-ringbufferoft-setmaxsize>)
@@ -132,11 +136,27 @@ func (r *RingBuffer) Peek() (T, error)
 func (r *RingBuffer) PeekAll() (buf []T)
 ```
 
+### func \(\*RingBuffer\) RPeek
+
+```go
+func (r *RingBuffer) RPeek() (T, error)
+```
+
+RPeek get the latest written data.
+
 ### func \(\*RingBuffer\) RPeekN
 
 ```go
 func (r *RingBuffer) RPeekN(n int) []T
 ```
+
+### func \(\*RingBuffer\) RRead
+
+```go
+func (r *RingBuffer) RRead() (T, error)
+```
+
+RRead erases the last written data, and returns that data.
 
 ### func \(\*RingBuffer\) Read
 
@@ -246,11 +266,27 @@ func (r *RingBufferOf[T]) Peek() (T, error)
 func (r *RingBufferOf[T]) PeekAll() (buf []T)
 ```
 
+### func \(\*RingBufferOf\[T\]\) RPeek
+
+```go
+func (r *RingBufferOf[T]) RPeek() (T, error)
+```
+
+RPeek get the latest written data.
+
 ### func \(\*RingBufferOf\[T\]\) RPeekN
 
 ```go
 func (r *RingBufferOf[T]) RPeekN(n int) []T
 ```
+
+### func \(\*RingBufferOf\[T\]\) RRead
+
+```go
+func (r *RingBufferOf[T]) RRead() (T, error)
+```
+
+RRead erases the last written data, and returns that data.
 
 ### func \(\*RingBufferOf\[T\]\) Read
 
