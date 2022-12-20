@@ -179,6 +179,40 @@ func (r *RingBuffer) grow() {
 	r.buf = buf
 }
 
+// Truncate discards all but the first n unread bytes from the buffer
+// but continues to use the same allocated storage.
+func (r *RingBuffer) Truncate(n int) {
+	if n <= 0 {
+		r.Reset()
+		return
+	}
+
+	if r.Len() <= n {
+		return
+	}
+
+	if r.size > n*2 {
+		data := r.RPeekN(n)
+		r.r = 0
+		r.w = n
+		r.size = n + 1
+		r.buf = make([]T, r.size)
+		copy(r.buf, data)
+		return
+	}
+
+	if r.w > r.r {
+		r.r = r.w - r.r - n
+	} else {
+		x := r.w - n
+		if x >= 0 {
+			r.r = x
+		} else {
+			r.r = r.size + x
+		}
+	}
+}
+
 func (r *RingBuffer) IsEmpty() bool {
 	return r.r == r.w
 }
@@ -222,6 +256,7 @@ func (r *RingBuffer) SetMaxSize(n int) int {
 	} else if n >= minBufferSize {
 		// Reset maximum limit
 		r.maxSize = n
+		r.Truncate(n)
 	}
 
 	return r.maxSize

@@ -126,9 +126,6 @@ func TestRingBuffer_MaxSize(t *testing.T) {
 	assert.Nil(t, v)
 	assert.Error(t, err, ErrIsEmpty)
 
-	write := 0
-	read := 0
-
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
@@ -141,14 +138,12 @@ func TestRingBuffer_MaxSize(t *testing.T) {
 	// then write 10
 	for i := 0; i < 9; i++ {
 		rb.Write(i)
-		write += i
 	}
 	assert.Equal(t, 10, rb.Capacity())
 	assert.Equal(t, 9, rb.Len())
 
 	// write one more, the buffer is full so it grows
 	rb.Write(10)
-	write += 10
 	assert.Equal(t, 20, rb.Capacity())
 	assert.Equal(t, 10, rb.Len())
 
@@ -166,14 +161,14 @@ func TestRingBuffer_MaxSize(t *testing.T) {
 
 	for i := 0; i < 90; i++ {
 		rb.Write(i)
-		write += i
 	}
 
 	assert.Equal(t, 160, rb.Capacity())
 	assert.Equal(t, 100, rb.Len())
 	assert.Equal(t, 0, rb.MaxSize())
 
-	rb.SetMaxSize(minBufferSize)
+	maxSize := 2
+	rb.SetMaxSize(maxSize)
 	callbackDiscardsCount := 0
 	rb.SetOnDiscards(func(v interface{}) {
 		callbackDiscardsCount++
@@ -183,25 +178,18 @@ func TestRingBuffer_MaxSize(t *testing.T) {
 		rb.Write(i)
 	}
 
-	assert.Equal(t, 160, rb.Capacity())
-	assert.Equal(t, 100, rb.Len())
+	assert.Equal(t, maxSize+1, rb.Capacity())
+	assert.Equal(t, maxSize, rb.Len())
 	assert.Equal(t, uint64(180), rb.Discards())
-	assert.Equal(t, minBufferSize, rb.MaxSize())
+	assert.Equal(t, maxSize, rb.MaxSize())
 	assert.Equal(t, 90, callbackDiscardsCount)
 
 	for {
-		v, err := rb.Read()
-		if err == ErrIsEmpty {
+		if _, err := rb.Read(); err == ErrIsEmpty {
 			break
 		}
-
-		read += v.(int)
 	}
-
-	assert.Equal(t, write, read)
-
-	rb.Reset()
-	assert.Equal(t, 10, rb.Capacity())
+	assert.Equal(t, maxSize+1, rb.Capacity())
 	assert.Equal(t, 0, rb.Len())
 	assert.True(t, rb.IsEmpty())
 }
