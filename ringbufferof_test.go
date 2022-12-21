@@ -6,14 +6,14 @@ package ringbuffer
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/fufuok/assert"
 )
 
 func TestRingBufferOf(t *testing.T) {
 	rb := NewUnboundedOf[int](10)
 	v, err := rb.Read()
 	assert.Equal(t, v, 0)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	write := 0
 	read := 0
@@ -21,7 +21,7 @@ func TestRingBufferOf(t *testing.T) {
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -70,7 +70,7 @@ func TestRingBufferOf_One(t *testing.T) {
 	rb := NewOf[int](1)
 	v, err := rb.Read()
 	assert.Equal(t, v, 0)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	write := 0
 	read := 0
@@ -78,7 +78,7 @@ func TestRingBufferOf_One(t *testing.T) {
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -127,12 +127,12 @@ func TestRingBufferOf_MaxSize(t *testing.T) {
 	rb := NewFixedOf[int](10)
 	v, err := rb.Read()
 	assert.Equal(t, v, 0)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -240,10 +240,10 @@ func TestRingBufferOf_RRead(t *testing.T) {
 	assert.True(t, rb.IsEmpty())
 
 	v, err = rb.RPeek()
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 	assert.Equal(t, 0, v)
 	v, err = rb.RRead()
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 0, rb.w)
 

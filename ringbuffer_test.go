@@ -3,14 +3,14 @@ package ringbuffer
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/fufuok/assert"
 )
 
 func TestRingBuffer(t *testing.T) {
 	rb := NewUnbounded(10)
 	v, err := rb.Read()
 	assert.Nil(t, v)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	write := 0
 	read := 0
@@ -18,7 +18,7 @@ func TestRingBuffer(t *testing.T) {
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -67,7 +67,7 @@ func TestRingBuffer_One(t *testing.T) {
 	rb := New(1)
 	v, err := rb.Read()
 	assert.Nil(t, v)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	write := 0
 	read := 0
@@ -75,7 +75,7 @@ func TestRingBuffer_One(t *testing.T) {
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -124,12 +124,12 @@ func TestRingBuffer_MaxSize(t *testing.T) {
 	rb := NewFixed(10)
 	v, err := rb.Read()
 	assert.Nil(t, v)
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 
 	// write one and read it
 	rb.Write(0)
 	v, err = rb.Read()
-	assert.NoError(t, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 0, v)
 	assert.Equal(t, 1, rb.r)
 	assert.Equal(t, 1, rb.w)
@@ -237,10 +237,10 @@ func TestRingBuffer_RRead(t *testing.T) {
 	assert.True(t, rb.IsEmpty())
 
 	v, err = rb.RPeek()
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 	assert.Equal(t, nil, v)
 	v, err = rb.RRead()
-	assert.Error(t, err, ErrIsEmpty)
+	assert.NotNil(t, err, ErrIsEmpty)
 	assert.Equal(t, nil, v)
 	assert.Equal(t, 0, rb.w)
 
