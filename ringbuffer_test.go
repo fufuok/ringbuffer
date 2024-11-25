@@ -3,7 +3,7 @@ package ringbuffer
 import (
 	"testing"
 
-	"github.com/fufuok/assert"
+	"github.com/fufuok/ringbuffer/internal/assert"
 )
 
 func TestRingBuffer(t *testing.T) {
